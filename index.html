@@ -1,34 +1,266 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Proyecto Web - Home</title>
-		<link rel="stylesheet" href="styles.css">
+		<title>VestIA - Boutique Inteligente</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@300;400;600&display=swap">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+		<link rel="stylesheet" href="css/styles.css">
 	</head>
 	<body>
-		<header>
-			<h1>Proyecto Web</h1>
-			<p>Basic HTML template</p>
+		<header class="border-bottom bg-light fixed-top">
+			<nav class="navbar navbar-expand-lg navbar-light">
+				<section class="container">
+					<span class="navbar-brand fw-bold">VestIA</span>
+					<span id="nav-toggle" class="navbar-toggler" role="button" tabindex="0" aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</span>
+					<ul id="nav-links" class="navbar-nav ms-auto">
+						<li class="nav-item">
+							<span class="nav-link js-nav-link" role="button" tabindex="0" data-target="catalogo">Catalogo</span>
+						</li>
+						<li class="nav-item">
+							<span class="nav-link js-nav-link" role="button" tabindex="0" data-target="asistente">Asistente IA</span>
+						</li>
+						<li class="nav-item">
+							<span class="nav-link js-nav-link" role="button" tabindex="0" data-target="imagenes">Imagen</span>
+						</li>
+						<li class="nav-item">
+							<span class="nav-link js-nav-link" role="button" tabindex="0" data-target="preferencias">Preferencias</span>
+						</li>
+						<li class="nav-item">
+							<span class="nav-link js-nav-link" role="button" tabindex="0" data-target="carrito">Carrito</span>
+						</li>
+					</ul>
+				</section>
+			</nav>
 		</header>
 
-		<nav>
-			<ul>
-				<li><a href="#">Home</a></li>
-				<li><a href="#">About</a></li>
-				<li><a href="#">Contact</a></li>
-			</ul>
-		</nav>
-
 		<main>
-			<section>
-				<h2>Welcome</h2>
-				<p>This is a simple HTML starter page.</p>
+			<section id="hero" class="py-5">
+				<section class="container">
+					<h1 class="display-5 mb-3">VestIA, tu estilista 24/7</h1>
+					<p class="lead mb-4">
+						Encuentra prendas, combina estilos y recibe sugerencias con un asistente inteligente.
+					</p>
+					<form id="cta-form" class="d-grid d-sm-inline-block">
+						<input type="submit" class="btn btn-primary btn-lg" value="Explorar catalogo">
+					</form>
+					<p class="text-muted mt-3">Personaliza filtros, analiza imagenes y arma tu carrito en minutos.</p>
+				</section>
+			</section>
+
+			<section id="catalogo" class="py-5">
+				<section class="container">
+					<h2 class="mb-3">Catalogo VestIA</h2>
+					<section class="row g-3 align-items-center">
+						<section class="col-12 col-lg-7">
+							<form id="search-form" class="row g-2 needs-validation" novalidate>
+								<label for="search-input" class="col-12 col-md-3 col-form-label">Buscar</label>
+								<section class="col-12 col-md-6">
+									<input id="search-input" type="text" class="form-control" placeholder="Nombre o descripcion" minlength="2" maxlength="50">
+								</section>
+								<section class="col-12 col-md-3 d-grid">
+									<input type="submit" class="btn btn-dark" value="Buscar">
+								</section>
+							</form>
+						</section>
+						<section class="col-12 col-lg-5">
+							<p id="catalog-status" class="text-muted mb-0"></p>
+						</section>
+					</section>
+
+					<form id="filters-form" class="row g-3 mt-3 needs-validation" novalidate>
+						<fieldset class="col-12 col-md-4">
+							<label for="category-select" class="form-label">Categoria</label>
+							<select id="category-select" class="form-select js-filter-field">
+								<option value="">Todas</option>
+							</select>
+						</fieldset>
+						<fieldset class="col-12 col-md-4">
+							<label for="color-select" class="form-label">Color</label>
+							<select id="color-select" class="form-select js-filter-field">
+								<option value="">Todos</option>
+							</select>
+						</fieldset>
+						<fieldset class="col-12 col-md-4">
+							<label for="size-select" class="form-label">Talla</label>
+							<select id="size-select" class="form-select js-filter-field">
+								<option value="">Todas</option>
+							</select>
+						</fieldset>
+						<fieldset class="col-12 col-md-4">
+							<label for="occasion-select" class="form-label">Ocasion</label>
+							<select id="occasion-select" class="form-select js-filter-field">
+								<option value="">Todas</option>
+							</select>
+						</fieldset>
+						<fieldset class="col-12 col-md-4">
+							<label for="style-select" class="form-label">Estilo</label>
+							<select id="style-select" class="form-select js-filter-field">
+								<option value="">Todos</option>
+							</select>
+						</fieldset>
+						<fieldset class="col-12 col-md-4">
+							<label for="price-range" class="form-label">Precio maximo</label>
+							<input id="price-range" type="range" class="form-range js-filter-field" min="0" max="500" step="10" value="500">
+							<span id="price-value" class="text-muted">Hasta 500</span>
+						</fieldset>
+						<fieldset class="col-12 col-md-4 d-grid">
+							<input type="submit" class="btn btn-primary" value="Aplicar filtros">
+							<span id="filters-reset" class="btn btn-outline-secondary mt-2" role="button" tabindex="0">Limpiar filtros</span>
+						</fieldset>
+					</form>
+
+					<ul id="product-grid" class="row list-unstyled mt-4"></ul>
+					<ul id="catalog-pagination" class="pagination justify-content-center mt-3"></ul>
+				</section>
+			</section>
+
+			<section id="asistente" class="py-5 bg-light">
+				<section class="container">
+					<h2 class="mb-3">Lia, asistente de estilo</h2>
+					<section class="row g-4">
+						<section class="col-12 col-lg-7">
+							<section class="border bg-white p-3">
+								<p class="mb-2">
+									<strong>Lia:</strong> Preguntame sobre colores, tallas, precios o estilos para armar tu look.
+								</p>
+								<ul id="chat-messages" class="list-unstyled mb-0"></ul>
+							</section>
+							<form id="chat-form" class="row g-2 mt-3 needs-validation" novalidate>
+								<label for="chat-input" class="col-12 col-md-3 col-form-label">Mensaje</label>
+								<section class="col-12 col-md-7">
+									<input id="chat-input" type="text" class="form-control" required minlength="2" maxlength="200" placeholder="Ej: Busco un look casual">
+								</section>
+								<section class="col-12 col-md-2 d-grid">
+									<input type="submit" class="btn btn-primary" value="Enviar">
+								</section>
+							</form>
+							<p id="chat-status" class="text-muted mt-2 mb-0"></p>
+						</section>
+						<section class="col-12 col-lg-5">
+							<section class="border bg-white p-3">
+								<h3 class="h5">Guia rapida</h3>
+								<ul class="list-unstyled mb-0">
+									<li class="mb-2">
+										<span class="fa-solid fa-comments me-2"></span>
+										Responde preguntas para refinar tus gustos.
+									</li>
+									<li class="mb-2">
+										<span class="fa-solid fa-tags me-2"></span>
+										Recibe un boton con filtros sugeridos.
+									</li>
+									<li>
+										<span class="fa-solid fa-bag-shopping me-2"></span>
+										Agrega productos al carrito desde las recomendaciones.
+									</li>
+								</ul>
+							</section>
+						</section>
+					</section>
+				</section>
+			</section>
+
+			<section id="imagenes" class="py-5">
+				<section class="container">
+					<h2 class="mb-3">Analisis de imagen</h2>
+					<section class="row g-4">
+						<section class="col-12 col-lg-6">
+							<form id="image-form" class="needs-validation" novalidate>
+								<label for="image-input" class="form-label">Sube una imagen de referencia</label>
+								<input id="image-input" type="file" class="form-control" accept="image/*" required>
+								<input type="submit" class="btn btn-dark mt-3" value="Analizar imagen">
+							</form>
+							<img id="image-preview" class="img-fluid mt-3 border" alt="Vista previa">
+							<p id="image-status" class="text-muted mt-2 mb-0"></p>
+							<ul id="image-result" class="list-unstyled mt-2"></ul>
+						</section>
+						<section class="col-12 col-lg-6">
+							<h3 class="h5">Recomendaciones basadas en imagen</h3>
+							<ul id="image-recommendations" class="row list-unstyled"></ul>
+						</section>
+					</section>
+				</section>
+			</section>
+
+			<section id="preferencias" class="py-5 bg-light">
+				<section class="container">
+					<h2 class="mb-3">Preferencias del usuario</h2>
+					<section class="row g-4">
+						<section class="col-12 col-lg-7">
+							<form id="prefs-form" class="row g-3 needs-validation" novalidate>
+								<fieldset class="col-12">
+									<legend class="h6">Colores favoritos</legend>
+									<ul id="pref-colors" class="row list-unstyled mb-0"></ul>
+								</fieldset>
+								<fieldset class="col-12 col-md-6">
+									<label for="pref-size" class="form-label">Talla preferida</label>
+									<select id="pref-size" class="form-select" required>
+										<option value="">Selecciona</option>
+									</select>
+								</fieldset>
+								<fieldset class="col-12 col-md-6">
+									<label for="pref-style" class="form-label">Estilo preferido</label>
+									<select id="pref-style" class="form-select" required>
+										<option value="">Selecciona</option>
+									</select>
+								</fieldset>
+								<fieldset class="col-12 d-grid">
+									<input type="submit" class="btn btn-primary" value="Guardar preferencias">
+									<span id="apply-preferences" class="btn btn-outline-dark mt-2" role="button" tabindex="0">Aplicar a filtros</span>
+								</fieldset>
+							</form>
+							<p id="pref-status" class="text-muted mt-2 mb-0"></p>
+						</section>
+						<section class="col-12 col-lg-5">
+							<section class="border bg-white p-3">
+								<h3 class="h5">Resumen guardado</h3>
+								<p id="pref-summary" class="mb-0 text-muted">Aun no hay preferencias guardadas.</p>
+							</section>
+						</section>
+					</section>
+				</section>
+			</section>
+
+			<section id="carrito" class="py-5">
+				<section class="container">
+					<h2 class="mb-3">Carrito de compras</h2>
+					<section class="row g-4">
+						<section class="col-12 col-lg-8">
+							<ul id="cart-items" class="list-group"></ul>
+							<p id="cart-empty" class="text-muted mt-3 mb-0"></p>
+						</section>
+						<section class="col-12 col-lg-4">
+							<section class="border bg-light p-3">
+								<h3 class="h5">Resumen</h3>
+								<p id="cart-total" class="mb-1">Total: $0</p>
+								<p id="cart-status" class="text-muted mb-0"></p>
+							</section>
+						</section>
+					</section>
+				</section>
 			</section>
 		</main>
 
-		<footer>
-			<p>&copy; 2026 Proyecto Web</p>
+		<footer class="border-top py-4">
+			<section class="container">
+				<p class="mb-0 text-muted">VestIA 2026 - Proyecto academico de programacion web.</p>
+			</section>
 		</footer>
+
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+		<script src="js/config.js"></script>
+		<script src="js/products.js"></script>
+		<script src="js/cart.js"></script>
+		<script src="js/filters.js"></script>
+		<script src="js/profile.js"></script>
+		<script src="js/chatbot.js"></script>
+		<script src="js/main.js"></script>
 	</body>
 </html>
