@@ -43,14 +43,33 @@
 		select.appendChild(defaultOption);
 		options.forEach(function (option) {
 			var item = document.createElement("option");
-			item.value = option;
-			item.textContent = option;
+			if (typeof option === "object" && option !== null) {
+				item.value = option.value;
+				item.textContent = option.label;
+			} else {
+				item.value = option;
+				item.textContent = option;
+			}
 			select.appendChild(item);
 		});
 	}
 
+	function formatCategoryLabel(value) {
+		var text = String(value || "").replace(/-/g, " ");
+		if (!text) {
+			return "";
+		}
+		return text.charAt(0).toUpperCase() + text.slice(1);
+	}
+
 	function setCategories(categories) {
-		setOptions(dom.category, categories, "Todas");
+		var options = categories.map(function (category) {
+			return {
+				value: category,
+				label: formatCategoryLabel(category)
+			};
+		});
+		setOptions(dom.category, options, "Todas");
 	}
 
 	function setStaticOptions() {

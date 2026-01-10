@@ -4,7 +4,7 @@
 	APP.config = {
 		dummyBaseUrl: "https://dummyjson.com",
 		productsPerPage: 9,
-		geminiApiKey: "AIzaSyBVK1SRUxBc0mDQgYr9sOdEfwYwDVKATSM", // Academic use only. Do not expose in production.
+		geminiApiKey: "AIzaSyAdBNPOL3voZ4hQ9Lsbg5gr4dDNoi1eWcE", // Academic use only. Do not expose in production.
 		geminiModel: "gemini-2.5-flash",
 		geminiBaseUrl: "https://generativelanguage.googleapis.com/v1beta/models",
 		storageKeys: {
@@ -15,10 +15,10 @@
 	};
 
 	APP.constants = {
-		colors: ["black", "white", "red", "blue", "green", "beige", "brown"],
+		colors: ["Negro", "Blanco", "Rojo", "Azul", "Verde", "Beige", "Marron"],
 		sizes: ["XS", "S", "M", "L", "XL"],
-		occasions: ["formal", "casual", "sport", "party", "work"],
-		styles: ["classic", "minimal", "street", "boho", "sport"],
+		occasions: ["Formal", "Casual", "Deportivo", "Fiesta", "Trabajo"],
+		styles: ["Clasico", "Minimal", "Urbano", "Bohemio", "Deportivo"],
 		priceMaxDefault: 500
 	};
 

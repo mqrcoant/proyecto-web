@@ -15,7 +15,13 @@
 		<header class="border-bottom bg-light fixed-top">
 			<nav class="navbar navbar-expand-lg navbar-light">
 				<section class="container">
-					<span class="navbar-brand fw-bold">VestIA</span>
+					<section class="d-flex align-items-center">
+						<span id="prefs-toggle" class="btn btn-outline-dark btn-sm me-2" role="button" tabindex="0" aria-expanded="false" aria-controls="prefs-sidebar">
+							<span class="fa-solid fa-bars me-1"></span>
+							Preferencias
+						</span>
+						<span class="navbar-brand fw-bold">VestIA</span>
+					</section>
 					<span id="nav-toggle" class="navbar-toggler" role="button" tabindex="0" aria-label="Toggle navigation">
 						<span class="navbar-toggler-icon"></span>
 					</span>
@@ -24,13 +30,7 @@
 							<span class="nav-link js-nav-link" role="button" tabindex="0" data-target="catalogo">Catalogo</span>
 						</li>
 						<li class="nav-item">
-							<span class="nav-link js-nav-link" role="button" tabindex="0" data-target="asistente">Asistente IA</span>
-						</li>
-						<li class="nav-item">
 							<span class="nav-link js-nav-link" role="button" tabindex="0" data-target="imagenes">Imagen</span>
-						</li>
-						<li class="nav-item">
-							<span class="nav-link js-nav-link" role="button" tabindex="0" data-target="preferencias">Preferencias</span>
 						</li>
 						<li class="nav-item">
 							<span class="nav-link js-nav-link" role="button" tabindex="0" data-target="carrito">Carrito</span>
@@ -121,51 +121,6 @@
 				</section>
 			</section>
 
-			<section id="asistente" class="py-5 bg-light">
-				<section class="container">
-					<h2 class="mb-3">Lia, asistente de estilo</h2>
-					<section class="row g-4">
-						<section class="col-12 col-lg-7">
-							<section class="border bg-white p-3">
-								<p class="mb-2">
-									<strong>Lia:</strong> Preguntame sobre colores, tallas, precios o estilos para armar tu look.
-								</p>
-								<ul id="chat-messages" class="list-unstyled mb-0"></ul>
-							</section>
-							<form id="chat-form" class="row g-2 mt-3 needs-validation" novalidate>
-								<label for="chat-input" class="col-12 col-md-3 col-form-label">Mensaje</label>
-								<section class="col-12 col-md-7">
-									<input id="chat-input" type="text" class="form-control" required minlength="2" maxlength="200" placeholder="Ej: Busco un look casual">
-								</section>
-								<section class="col-12 col-md-2 d-grid">
-									<input type="submit" class="btn btn-primary" value="Enviar">
-								</section>
-							</form>
-							<p id="chat-status" class="text-muted mt-2 mb-0"></p>
-						</section>
-						<section class="col-12 col-lg-5">
-							<section class="border bg-white p-3">
-								<h3 class="h5">Guia rapida</h3>
-								<ul class="list-unstyled mb-0">
-									<li class="mb-2">
-										<span class="fa-solid fa-comments me-2"></span>
-										Responde preguntas para refinar tus gustos.
-									</li>
-									<li class="mb-2">
-										<span class="fa-solid fa-tags me-2"></span>
-										Recibe un boton con filtros sugeridos.
-									</li>
-									<li>
-										<span class="fa-solid fa-bag-shopping me-2"></span>
-										Agrega productos al carrito desde las recomendaciones.
-									</li>
-								</ul>
-							</section>
-						</section>
-					</section>
-				</section>
-			</section>
-
 			<section id="imagenes" class="py-5">
 				<section class="container">
 					<h2 class="mb-3">Analisis de imagen</h2>
@@ -183,45 +138,6 @@
 						<section class="col-12 col-lg-6">
 							<h3 class="h5">Recomendaciones basadas en imagen</h3>
 							<ul id="image-recommendations" class="row list-unstyled"></ul>
-						</section>
-					</section>
-				</section>
-			</section>
-
-			<section id="preferencias" class="py-5 bg-light">
-				<section class="container">
-					<h2 class="mb-3">Preferencias del usuario</h2>
-					<section class="row g-4">
-						<section class="col-12 col-lg-7">
-							<form id="prefs-form" class="row g-3 needs-validation" novalidate>
-								<fieldset class="col-12">
-									<legend class="h6">Colores favoritos</legend>
-									<ul id="pref-colors" class="row list-unstyled mb-0"></ul>
-								</fieldset>
-								<fieldset class="col-12 col-md-6">
-									<label for="pref-size" class="form-label">Talla preferida</label>
-									<select id="pref-size" class="form-select" required>
-										<option value="">Selecciona</option>
-									</select>
-								</fieldset>
-								<fieldset class="col-12 col-md-6">
-									<label for="pref-style" class="form-label">Estilo preferido</label>
-									<select id="pref-style" class="form-select" required>
-										<option value="">Selecciona</option>
-									</select>
-								</fieldset>
-								<fieldset class="col-12 d-grid">
-									<input type="submit" class="btn btn-primary" value="Guardar preferencias">
-									<span id="apply-preferences" class="btn btn-outline-dark mt-2" role="button" tabindex="0">Aplicar a filtros</span>
-								</fieldset>
-							</form>
-							<p id="pref-status" class="text-muted mt-2 mb-0"></p>
-						</section>
-						<section class="col-12 col-lg-5">
-							<section class="border bg-white p-3">
-								<h3 class="h5">Resumen guardado</h3>
-								<p id="pref-summary" class="mb-0 text-muted">Aun no hay preferencias guardadas.</p>
-							</section>
 						</section>
 					</section>
 				</section>
@@ -252,6 +168,81 @@
 				<p class="mb-0 text-muted">VestIA 2026 - Proyecto academico de programacion web.</p>
 			</section>
 		</footer>
+
+		<section id="prefs-sidebar" class="position-fixed top-0 start-0 h-100 bg-white border-end d-none">
+			<section class="p-3 border-bottom d-flex justify-content-between align-items-center">
+				<section class="d-flex align-items-center">
+					<span class="fa-solid fa-user-gear me-2"></span>
+					<strong>Preferencias</strong>
+				</section>
+				<span id="prefs-close" class="btn btn-sm btn-outline-secondary" role="button" tabindex="0">Cerrar</span>
+			</section>
+			<section class="p-3">
+				<form id="prefs-form" class="row g-3 needs-validation" novalidate>
+					<fieldset class="col-12">
+						<legend class="h6">Colores favoritos</legend>
+						<ul id="pref-colors" class="row list-unstyled mb-0"></ul>
+					</fieldset>
+					<fieldset class="col-12">
+						<label for="pref-size" class="form-label">Talla preferida</label>
+						<select id="pref-size" class="form-select" required>
+							<option value="">Selecciona</option>
+						</select>
+					</fieldset>
+					<fieldset class="col-12">
+						<label for="pref-style" class="form-label">Estilo preferido</label>
+						<select id="pref-style" class="form-select" required>
+							<option value="">Selecciona</option>
+						</select>
+					</fieldset>
+					<fieldset class="col-12 d-grid">
+						<input type="submit" class="btn btn-primary" value="Guardar preferencias">
+						<span id="apply-preferences" class="btn btn-outline-dark mt-2" role="button" tabindex="0">Aplicar a filtros</span>
+					</fieldset>
+				</form>
+				<p id="pref-status" class="text-muted mt-2 mb-3"></p>
+				<section class="border bg-light p-3">
+					<h3 class="h6">Resumen guardado</h3>
+					<p id="pref-summary" class="mb-0 text-muted">Aun no hay preferencias guardadas.</p>
+				</section>
+			</section>
+		</section>
+
+		<section id="prefs-overlay" class="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-none"></section>
+
+		<section id="chat-widget" class="position-fixed bottom-0 end-0 p-3 d-flex flex-column align-items-end z-3">
+			<section id="chat-panel" class="card border-0 shadow rounded-4 d-none">
+				<section class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+					<section class="d-flex align-items-center">
+						<span class="fa-solid fa-robot me-2"></span>
+						<strong>Lia</strong>
+					</section>
+					<section class="d-flex align-items-center">
+						<span class="badge text-bg-light me-2">IA</span>
+						<span id="chat-close" class="btn btn-sm btn-outline-light" role="button" tabindex="0">Cerrar</span>
+					</section>
+				</section>
+				<section class="card-body bg-light">
+					<p class="mb-2 text-muted">Preguntame sobre colores, tallas, precios o estilos.</p>
+					<ul id="chat-messages" class="list-unstyled mb-0"></ul>
+				</section>
+				<section class="card-footer bg-white">
+					<form id="chat-form" class="row g-2 needs-validation" novalidate>
+						<label for="chat-input" class="col-12 form-label visually-hidden">Mensaje</label>
+						<section class="col-12">
+							<input id="chat-input" type="text" class="form-control" required minlength="2" maxlength="200" placeholder="Ej: Busco un look casual">
+						</section>
+						<section class="col-12 d-grid">
+							<input type="submit" class="btn btn-primary" value="Enviar">
+						</section>
+					</form>
+					<p id="chat-status" class="text-muted mt-2 mb-0"></p>
+				</section>
+			</section>
+			<span id="chat-toggle" class="btn btn-dark btn-lg rounded-circle mt-2" role="button" tabindex="0" aria-expanded="false" aria-controls="chat-panel" aria-label="Abrir chat">
+				<span class="fa-solid fa-comment-dots"></span>
+			</span>
+		</section>
 
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

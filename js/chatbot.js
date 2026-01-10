@@ -102,7 +102,7 @@
 	}
 
 	function buildPrompt() {
-		var base = "You are Lia, a fashion assistant for VestIA. Ask short questions about color, size, price, style, and occasion. Reply in JSON only without markdown: {\"reply\":\"...\",\"filters\":{}}. Use lowercase for filters: color, size, occasion, style, category, priceMax, query. Keep reply under 40 words. Use ASCII only.";
+		var base = "You are Lia, a fashion assistant for VestIA. Ask short questions about color, size, price, style, and occasion. Reply in JSON only without markdown: {\"reply\":\"...\",\"filters\":{}}. Use lowercase Spanish values without accents for filters: color=negro, blanco, rojo, azul, verde, beige, marron; size=xs,s,m,l,xl; occasion=formal, casual, deportivo, fiesta, trabajo; style=clasico, minimal, urbano, bohemio, deportivo. category and query optional. Keep reply under 40 words. Use ASCII only.";
 		var contents = [{ role: "user", parts: [{ text: base }] }];
 		history.forEach(function (entry) {
 			contents.push({ role: entry.role === "user" ? "user" : "model", parts: [{ text: entry.text }] });
@@ -110,36 +110,109 @@
 		return { contents: contents };
 	}
 
+	function normalizeByMap(value, map, allowed) {
+		if (!value) {
+			return "";
+		}
+		var key = String(value).toLowerCase().trim();
+		if (map && map[key]) {
+			return map[key];
+		}
+		if (allowed && allowed.length) {
+			for (var i = 0; i < allowed.length; i += 1) {
+				if (allowed[i].toLowerCase() === key) {
+					return allowed[i];
+				}
+			}
+		}
+		return "";
+	}
+
+	function normalizeCategory(value) {
+		if (!value) {
+			return "";
+		}
+		return String(value).toLowerCase().trim();
+	}
+
 	function parseFilters(rawFilters) {
 		if (!rawFilters || typeof rawFilters !== "object") {
 			return null;
 		}
 		var filters = {};
+		var colorMap = {
+			negro: "Negro",
+			black: "Negro",
+			blanco: "Blanco",
+			white: "Blanco",
+			rojo: "Rojo",
+			red: "Rojo",
+			azul: "Azul",
+			blue: "Azul",
+			verde: "Verde",
+			green: "Verde",
+			beige: "Beige",
+			marron: "Marron",
+			brown: "Marron"
+		};
+		var sizeMap = {
+			xs: "XS",
+			s: "S",
+			m: "M",
+			l: "L",
+			xl: "XL"
+		};
+		var occasionMap = {
+			formal: "Formal",
+			casual: "Casual",
+			deportivo: "Deportivo",
+			sport: "Deportivo",
+			fiesta: "Fiesta",
+			party: "Fiesta",
+			trabajo: "Trabajo",
+			work: "Trabajo"
+		};
+		var styleMap = {
+			clasico: "Clasico",
+			classic: "Clasico",
+			minimal: "Minimal",
+			minimalista: "Minimal",
+			urbano: "Urbano",
+			street: "Urbano",
+			bohemio: "Bohemio",
+			boho: "Bohemio",
+			deportivo: "Deportivo",
+			sport: "Deportivo",
+			moderno: "Minimal",
+			modern: "Minimal"
+		};
 		if (rawFilters.color) {
-			if (Array.isArray(rawFilters.color)) {
-				filters.color = String(rawFilters.color[0] || "");
-			} else {
-				filters.color = String(rawFilters.color);
-			}
+			var colorValue = Array.isArray(rawFilters.color) ? rawFilters.color[0] : rawFilters.color;
+			filters.color = normalizeByMap(colorValue, colorMap, APP.constants.colors);
 		}
 		if (rawFilters.size) {
-			filters.size = String(rawFilters.size);
+			filters.size = normalizeByMap(rawFilters.size, sizeMap, APP.constants.sizes);
 		}
 		if (rawFilters.occasion) {
-			filters.occasion = String(rawFilters.occasion);
+			filters.occasion = normalizeByMap(rawFilters.occasion, occasionMap, APP.constants.occasions);
 		}
 		if (rawFilters.style) {
-			filters.style = String(rawFilters.style);
+			filters.style = normalizeByMap(rawFilters.style, styleMap, APP.constants.styles);
 		}
 		if (rawFilters.category) {
-			filters.category = String(rawFilters.category);
+			filters.category = normalizeCategory(rawFilters.category);
 		}
 		if (rawFilters.query) {
-			filters.query = String(rawFilters.query);
+			filters.query = String(rawFilters.query).trim();
 		}
 		if (rawFilters.priceMax) {
 			filters.priceMax = APP.utils.toNumber(rawFilters.priceMax, 0);
 		}
+		Object.keys(filters).forEach(function (key) {
+			if (!filters[key]) {
+				delete filters[key];
+			}
+		});
 		return Object.keys(filters).length ? filters : null;
 	}
 
@@ -200,7 +273,22 @@
 			body: JSON.stringify(payload)
 		}).then(function (response) {
 			if (!response.ok) {
-				throw new Error("Gemini request failed");
+				return response.text().then(function (text) {
+					var message = "Gemini request failed";
+					if (text) {
+						try {
+							var data = JSON.parse(text);
+							if (data && data.error && data.error.message) {
+								message = data.error.message;
+							} else {
+								message = text;
+							}
+						} catch (error) {
+							message = text;
+						}
+					}
+					throw new Error(message + " (HTTP " + response.status + ")");
+				});
 			}
 			return response.json();
 		}).then(function (data) {
@@ -249,8 +337,9 @@
 			addHistory("model", replyText, filters);
 			renderMessage({ role: "model", text: replyText, filters: filters });
 			setStatus("");
-		}).catch(function () {
-			var fallback = "No se pudo conectar con el asistente. Revisa la API key.";
+		}).catch(function (error) {
+			var detail = error && error.message ? " (" + error.message + ")" : "";
+			var fallback = "No se pudo conectar con el asistente. Revisa la API key." + detail;
 			addHistory("model", fallback);
 			renderMessage({ role: "model", text: fallback });
 			setStatus("");
@@ -335,7 +424,7 @@
 			return Promise.reject(new Error("Missing API key"));
 		}
 		var url = APP.config.geminiBaseUrl + "/" + APP.config.geminiModel + ":generateContent?key=" + apiKey;
-		var prompt = "Analyze the image. Reply in JSON only: {\"colors\":[...],\"style\":\"\",\"category\":\"\",\"occasion\":\"\"}. Use ASCII only.";
+		var prompt = "Analiza la imagen y responde solo JSON sin markdown. Si NO hay prenda, accesorio u outfit relacionado con moda, responde: {\"reconocida\":false,\"colores\":[],\"estilo\":\"\",\"categoria\":\"\",\"ocasion\":\"\"}. Si SI hay, responde: {\"reconocida\":true,\"colores\":[...],\"estilo\":\"\",\"categoria\":\"\",\"ocasion\":\"\"}. Usa valores en minusculas y sin acentos. Colores: negro, blanco, rojo, azul, verde, beige, marron. Estilos: clasico, minimal, urbano, bohemio, deportivo. Ocasion: formal, casual, deportivo, fiesta, trabajo. Categoria: blusa, pantalon, vestido, accesorio, calzado, abrigo, falda, short. Usa ASCII.";
 		var payload = {
 			contents: [{
 				role: "user",
@@ -351,7 +440,22 @@
 			body: JSON.stringify(payload)
 		}).then(function (response) {
 			if (!response.ok) {
-				throw new Error("Gemini image request failed");
+				return response.text().then(function (text) {
+					var message = "Gemini image request failed";
+					if (text) {
+						try {
+							var data = JSON.parse(text);
+							if (data && data.error && data.error.message) {
+								message = data.error.message;
+							} else {
+								message = text;
+							}
+						} catch (error) {
+							message = text;
+						}
+					}
+					throw new Error(message + " (HTTP " + response.status + ")");
+				});
 			}
 			return response.json();
 		}).then(function (data) {
@@ -365,11 +469,70 @@
 		if (!parsed) {
 			return null;
 		}
+		var recognized = parsed.reconocida;
+		if (typeof recognized !== "boolean") {
+			recognized = parsed.recognized === true;
+		}
+		if (recognized === false) {
+			return {
+				recognized: false,
+				colors: [],
+				style: "",
+				category: "",
+				occasion: ""
+			};
+		}
+		var colorMap = {
+			negro: "Negro",
+			black: "Negro",
+			blanco: "Blanco",
+			white: "Blanco",
+			rojo: "Rojo",
+			red: "Rojo",
+			azul: "Azul",
+			blue: "Azul",
+			verde: "Verde",
+			green: "Verde",
+			beige: "Beige",
+			marron: "Marron",
+			brown: "Marron"
+		};
+		var occasionMap = {
+			formal: "Formal",
+			casual: "Casual",
+			deportivo: "Deportivo",
+			sport: "Deportivo",
+			fiesta: "Fiesta",
+			party: "Fiesta",
+			trabajo: "Trabajo",
+			work: "Trabajo"
+		};
+		var styleMap = {
+			clasico: "Clasico",
+			classic: "Clasico",
+			minimal: "Minimal",
+			minimalista: "Minimal",
+			urbano: "Urbano",
+			street: "Urbano",
+			bohemio: "Bohemio",
+			boho: "Bohemio",
+			deportivo: "Deportivo",
+			sport: "Deportivo",
+			moderno: "Minimal",
+			modern: "Minimal"
+		};
+		var colors = Array.isArray(parsed.colors) ? parsed.colors : [];
+		var normalizedColors = colors.map(function (color) {
+			return normalizeByMap(color, colorMap, APP.constants.colors);
+		}).filter(function (color) {
+			return Boolean(color);
+		});
 		return {
-			colors: Array.isArray(parsed.colors) ? parsed.colors : [],
-			style: parsed.style || "",
-			category: parsed.category || "",
-			occasion: parsed.occasion || ""
+			recognized: true,
+			colors: normalizedColors,
+			style: normalizeByMap(parsed.style, styleMap, APP.constants.styles),
+			category: normalizeCategory(parsed.category),
+			occasion: normalizeByMap(parsed.occasion, occasionMap, APP.constants.occasions)
 		};
 	}
 
@@ -383,6 +546,13 @@
 			fail.className = "text-muted";
 			fail.textContent = "No se pudo interpretar el resultado.";
 			imageDom.result.appendChild(fail);
+			return;
+		}
+		if (data.recognized === false) {
+			var empty = document.createElement("p");
+			empty.className = "text-muted";
+			empty.textContent = "No se reconoce ninguna prenda o accesorio en la imagen.";
+			imageDom.result.appendChild(empty);
 			return;
 		}
 		var colors = document.createElement("li");
@@ -420,6 +590,12 @@
 			var parsed = parseImageResponse(text);
 			renderImageResult(parsed);
 			setImageStatus("");
+			if (!parsed || parsed.recognized === false) {
+				if (imageDom.recommendations) {
+					imageDom.recommendations.innerHTML = "";
+				}
+				return;
+			}
 			if (parsed) {
 				var filters = {
 					color: parsed.colors.length ? parsed.colors[0] : "",
@@ -436,8 +612,9 @@
 					});
 				}
 			}
-		}).catch(function () {
-			setImageStatus("No se pudo analizar la imagen. Revisa la API key.");
+		}).catch(function (error) {
+			var detail = error && error.message ? " (" + error.message + ")" : "";
+			setImageStatus("No se pudo analizar la imagen. Revisa la API key." + detail);
 		});
 	}
 

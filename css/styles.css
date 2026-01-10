@@ -48,12 +48,14 @@ h4,
 .chat-bubble {
 	background: #ffffff;
 	border: 1px solid var(--vestia-line);
+	border-left: 4px solid var(--vestia-gold);
 	padding: 12px;
 	margin-bottom: 10px;
 }
 
 .chat-bubble.user {
 	background: #fff3e0;
+	border-left: 4px solid #a67c52;
 }
 
 .chat-meta {
@@ -71,6 +73,55 @@ h4,
 	border: 1px solid var(--vestia-line);
 	padding: 6px;
 	background: #ffffff;
+}
+
+#chat-panel {
+	border: 1px solid var(--vestia-line);
+	width: 320px;
+}
+
+#chat-panel .card-header {
+	border-bottom: 1px solid var(--vestia-line);
+}
+
+#chat-panel .card-footer {
+	border-top: 1px solid var(--vestia-line);
+}
+
+#chat-toggle {
+	border: 1px solid var(--vestia-line);
+}
+
+#chat-widget {
+	right: 0;
+}
+
+#prefs-sidebar {
+	width: 320px;
+	overflow-y: auto;
+	z-index: 1045;
+}
+
+#prefs-sidebar.is-open {
+	display: block;
+}
+
+#prefs-toggle {
+	z-index: 1040;
+}
+
+#prefs-overlay {
+	z-index: 1040;
+}
+
+@media (max-width: 992px) {
+	#chat-panel {
+		width: 300px;
+	}
+
+	#prefs-sidebar {
+		width: 100%;
+	}
 }
 
 .status-badge {
